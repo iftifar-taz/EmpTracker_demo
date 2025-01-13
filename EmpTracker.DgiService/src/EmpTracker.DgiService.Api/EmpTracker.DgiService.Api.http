@@ -1,0 +1,6 @@
+@EmpTracker.DgiService_HostAddress = http://localhost:5173
+
+GET {{EmpTracker.DgiService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
