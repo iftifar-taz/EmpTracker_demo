@@ -1,7 +1,5 @@
 using EmpTracker.EmpService.Api.Configurations;
 using EmpTracker.EmpService.Api.Middlewares;
-using EmpTracker.EmpService.Core.Interfaces;
-using EmpTracker.EmpService.Infrastructure.Messaging;
 using EmpTracker.EmpService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

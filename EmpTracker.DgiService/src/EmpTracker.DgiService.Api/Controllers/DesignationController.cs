@@ -3,7 +3,6 @@ using EmpTracker.DgiService.Application.Dtos;
 using EmpTracker.DgiService.Application.Features.Designations.Commands;
 using EmpTracker.DgiService.Application.Features.Designations.Queries;
 using EmpTracker.DgiService.Core.Domain.Attribures;
-using EmpTracker.DgiService.Core.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
 using EmpTracker.DgiService.Core.Interfaces;
-using System.Net.Mime;
+using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace EmpTracker.DgiService.Infrastructure.Messaging
 {

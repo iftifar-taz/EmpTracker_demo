@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmpTracker.EmpService.Core.Domain.Attribures;
+﻿using EmpTracker.EmpService.Core.Domain.Attribures;
 using EmpTracker.EmpService.Core.Interfaces;
 using EmpTracker.EmpService.Core.Messages;
 using Microsoft.AspNetCore.Mvc;

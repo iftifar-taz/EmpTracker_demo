@@ -1,6 +1,5 @@
 ﻿using EmpTracker.Identity.Core.Interfaces;
 using EmpTracker.Identity.Infrastructure.Messaging;
-using Microsoft.OpenApi.Models;
 
 namespace EmpTracker.Identity.Api.Configurations
 {
@@ -14,7 +13,7 @@ namespace EmpTracker.Identity.Api.Configurations
             services.AddHostedService<PermissionSubscriberService>();
 
             services.AddHostedService<PermissionPublisherService>();
-            
+
             return services;
         }
     }

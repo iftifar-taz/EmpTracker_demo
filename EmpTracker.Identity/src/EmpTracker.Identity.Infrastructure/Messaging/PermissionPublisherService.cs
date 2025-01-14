@@ -1,9 +1,6 @@
-﻿using EmpTracker.Identity.Application.Features.Users.Commands;
-using EmpTracker.Identity.Core.Constants;
-using EmpTracker.Identity.Core.Domain.Attribures;
+﻿using EmpTracker.Identity.Core.Domain.Attribures;
 using EmpTracker.Identity.Core.Interfaces;
 using EmpTracker.Identity.Core.Messages;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

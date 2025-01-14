@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using EmpTracker.Identity.Application.Dtos;
-using EmpTracker.Identity.Application.Exceptions;
-using EmpTracker.Identity.Application.Extentions;
+﻿using EmpTracker.Identity.Application.Extentions;
 using EmpTracker.Identity.Application.Features.Permissions.Commands;
-using EmpTracker.Identity.Application.Features.Sessions.Commands;
 using EmpTracker.Identity.Core.Domain.Entities;
 using EmpTracker.Identity.Core.Interfaces;
 using MediatR;
