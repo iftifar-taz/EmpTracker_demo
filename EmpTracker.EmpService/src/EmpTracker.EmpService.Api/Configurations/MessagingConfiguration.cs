@@ -8,7 +8,9 @@ namespace EmpTracker.EmpService.Api.Configurations
         public static IServiceCollection ConfigureMessageBus(this IServiceCollection services)
         {
             services.AddSingleton<IMessageBus, MessageBus>();
+
             services.AddHostedService<EmployeeSubscriberService>();
+
             services.AddHostedService<PermissionPublisherService>();
 
             return services;

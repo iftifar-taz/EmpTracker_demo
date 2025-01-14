@@ -26,7 +26,7 @@ namespace EmpTracker.Identity.Infrastructure.Messaging
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _messageBus.SubscribeAsync<PermissionSyncMessage>(PermissionSyncMessageHandler, "empTracker.direct", ExchangeType.Direct, "identity.permission.*", "identity.permissions.queue");
+            await _messageBus.SubscribeAsync<PermissionSyncMessage>(PermissionSyncMessageHandler, "empTracker.topic", ExchangeType.Topic, "identity.permission.*", "identity.permissions.queue");
         }
 
         private async Task PermissionSyncMessageHandler(PermissionSyncMessage message)

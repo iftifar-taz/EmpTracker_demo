@@ -42,7 +42,6 @@ namespace EmpTracker.DptService.Infrastructure.Messaging
                         }
 
                     }
-
                 }
             }
 
@@ -52,7 +51,8 @@ namespace EmpTracker.DptService.Infrastructure.Messaging
                 Permissions = message.Distinct().ToList(),
             };
 
-            await _messageBus.PublishAsync(dto, "empTracker.direct", ExchangeType.Direct, "identity.permission.department");
+            await Task.Delay(10000, cancellationToken);
+            await _messageBus.PublishAsync(dto, "empTracker.topic", ExchangeType.Topic, "identity.permission.department");
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

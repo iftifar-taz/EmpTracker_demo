@@ -9,10 +9,12 @@ namespace EmpTracker.Identity.Api.Configurations
         public static IServiceCollection ConfigureMessageBus(this IServiceCollection services)
         {
             services.AddSingleton<IMessageBus, MessageBus>();
-            services.AddHostedService<PermissionPublisherService>();
+
             services.AddHostedService<IdentitySubscriberService>();
             services.AddHostedService<PermissionSubscriberService>();
 
+            services.AddHostedService<PermissionPublisherService>();
+            
             return services;
         }
     }

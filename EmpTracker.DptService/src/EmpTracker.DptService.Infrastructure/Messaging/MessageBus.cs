@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using EmpTracker.DptService.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +34,7 @@ namespace EmpTracker.DptService.Infrastructure.Messaging
                 true,
                 new BasicProperties
                 {
-                    ContentType = "text/plain",
+                    ContentType = MediaTypeNames.Application.Json,
                     DeliveryMode = DeliveryModes.Persistent
                 },
                 Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message))

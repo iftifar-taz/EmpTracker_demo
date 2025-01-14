@@ -8,7 +8,9 @@ namespace EmpTracker.DgiService.Api.Configurations
         public static IServiceCollection ConfigureMessageBus(this IServiceCollection services)
         {
             services.AddSingleton<IMessageBus, MessageBus>();
+
             services.AddHostedService<DesignationSubscriberService>();
+
             services.AddHostedService<PermissionPublisherService>();
 
             return services;

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using EmpTracker.DgiService.Core.Interfaces;
+using System.Net.Mime;
 
 namespace EmpTracker.DgiService.Infrastructure.Messaging
 {
@@ -37,7 +38,7 @@ namespace EmpTracker.DgiService.Infrastructure.Messaging
                 true,
                 new BasicProperties
                 {
-                    ContentType = "text/plain",
+                    ContentType = MediaTypeNames.Application.Json,
                     DeliveryMode = DeliveryModes.Persistent
                 },
                 Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message))
