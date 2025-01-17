@@ -4,27 +4,33 @@ using System.Security.Cryptography;
 using System.Text;
 using EmpTracker.Identity.Core.Domain.Entities;
 using EmpTracker.Identity.Core.Interfaces;
+using EmpTracker.Identity.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EmpTracker.Identity.Infrastructure.Services
 {
-    public class JwtTokenService(IUnitOfWork unitOfWork, IConfiguration configuration) : IJwtTokenService
+    public class JwtTokenService(RedisCacheService redisCacheService, IUnitOfWork unitOfWork, IConfiguration configuration) : IJwtTokenService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IConfiguration _configuration = configuration;
+        private readonly RedisCacheService _redisCacheService = redisCacheService;
 
         public async Task<string> GenerateToken(AppUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWTSetting").GetSection("SecurityKey").Value!);
             var roles = await _unitOfWork.UserManager.GetRolesAsync(user);
-            List<Claim> claims = [
+            var claims = new List<Claim>()
+            {
                 new (JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new (JwtRegisteredClaimNames.NameId, user.Id ?? string.Empty),
                 new (JwtRegisteredClaimNames.Aud, _configuration.GetSection("JWTSetting").GetSection("ValidAudience").Value!),
                 new (JwtRegisteredClaimNames.Iss, _configuration.GetSection("JWTSetting").GetSection("ValidIssuer").Value!),
-            ];
+
+            };
+
+            await _redisCacheService.SetCacheAsync(user.Id!, roles);
 
             foreach (var role in roles)
             {

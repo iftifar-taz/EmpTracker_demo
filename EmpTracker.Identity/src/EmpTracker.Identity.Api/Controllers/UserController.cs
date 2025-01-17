@@ -18,6 +18,7 @@ namespace EmpTracker.Identity.Api.Controllers
         private readonly IMediator _mediator = mediator;
         private readonly ILogger<UserController> _logger = logger;
 
+        [Authorize(Roles="Admin")]
         [PermissionRequirement("view.user")]
         [HttpGet("", Name = "GetUsers")]
         public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetUsers()

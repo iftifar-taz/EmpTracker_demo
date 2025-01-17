@@ -13,6 +13,9 @@ namespace EmpTracker.Identity.Api.Configurations
     {
         public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
         {
+
+            services.AddSingleton<RedisCacheService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
 
