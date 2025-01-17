@@ -11,9 +11,6 @@
 	</ItemGroup>	
   <ItemGroup>
     <ProjectReference Include="..\EmpTracker.DptService.Core\EmpTracker.DptService.Core.csproj" />
-  </ItemGroup>	
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

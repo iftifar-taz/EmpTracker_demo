@@ -25,7 +25,7 @@ namespace EmpTracker.EmpService.Application.Features.Employees.Handlers
             {
                 throw new NotFoundException("Department does not exist.");
             }
-            
+
             var newEmployee = new Employee
             {
                 FirstName = command.FirstName,

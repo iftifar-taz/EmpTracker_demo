@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
-using EmpTracker.DptService.Core.Protos;
-using MediatR;
+﻿using EmpTracker.DptService.Application.Exceptions;
 using EmpTracker.DptService.Application.Features.Departments.Queries;
-using EmpTracker.DptService.Application.Exceptions;
+using EmpTracker.DptService.Core.Protos;
+using Grpc.Core;
+using MediatR;
 
 namespace EmpTracker.DptService.Infrastructure.gRPC
 {
