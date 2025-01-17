@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "EmpTracker.DptService.Core.Protos";
+
+service DepartmentGrpc {
+  rpc CheckIfDepartmentExists (CheckIfDepartmentExistsRequest) returns (CheckIfDepartmentExistsResponse);
+}
+
+message CheckIfDepartmentExistsRequest {
+  string DepartmentId = 1;
+}
+
+message CheckIfDepartmentExistsResponse {
+  bool Exists = 1;
+}

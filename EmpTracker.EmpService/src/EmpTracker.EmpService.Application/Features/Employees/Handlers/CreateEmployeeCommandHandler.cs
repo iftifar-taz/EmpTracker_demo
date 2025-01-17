@@ -1,21 +1,31 @@
-﻿using EmpTracker.EmpService.Application.Dtos;
+﻿using EmpTracker.DptService.Core.Protos;
+using EmpTracker.EmpService.Application.Dtos;
+using EmpTracker.EmpService.Application.Exceptions;
 using EmpTracker.EmpService.Application.Features.Employees.Commands;
 using EmpTracker.EmpService.Core.Domain.Entities;
 using EmpTracker.EmpService.Core.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using static EmpTracker.DptService.Core.Protos.DepartmentGrpc;
 
 namespace EmpTracker.EmpService.Application.Features.Employees.Handlers
 {
-    public class CreateEmployeeCommandHandler(IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<CreateEmployeeCommandHandler> logger) : IRequestHandler<CreateEmployeeCommand>
+    public class CreateEmployeeCommandHandler(DepartmentGrpcClient departmentGrpcClient, IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<CreateEmployeeCommandHandler> logger) : IRequestHandler<CreateEmployeeCommand>
     {
         private readonly IMessageBus _messageBus = messageBus;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly DepartmentGrpcClient _departmentGrpcClient = departmentGrpcClient;
         private readonly ILogger<CreateEmployeeCommandHandler> _logger = logger;
 
         public async Task Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
+            var reply = await _departmentGrpcClient.CheckIfDepartmentExistsAsync(new CheckIfDepartmentExistsRequest { DepartmentId = command.DepartmentId.ToString() }, cancellationToken: cancellationToken);
+            if (!reply.Exists)
+            {
+                throw new NotFoundException("Department does not exist.");
+            }
+            
             var newEmployee = new Employee
             {
                 FirstName = command.FirstName,
