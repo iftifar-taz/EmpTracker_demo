@@ -1,29 +1,34 @@
-﻿using EmpTracker.DptService.Core.Protos;
-using EmpTracker.EmpService.Application.Dtos;
+﻿using EmpTracker.EmpService.Application.Dtos;
 using EmpTracker.EmpService.Application.Exceptions;
 using EmpTracker.EmpService.Application.Features.Employees.Commands;
 using EmpTracker.EmpService.Core.Domain.Entities;
 using EmpTracker.EmpService.Core.Interfaces;
+using EmpTracker.EmpService.Core.Protos;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using static EmpTracker.DptService.Core.Protos.DepartmentGrpc;
 
 namespace EmpTracker.EmpService.Application.Features.Employees.Handlers
 {
-    public class CreateEmployeeCommandHandler(DepartmentGrpcClient departmentGrpcClient, IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<CreateEmployeeCommandHandler> logger) : IRequestHandler<CreateEmployeeCommand>
+    public class CreateEmployeeCommandHandler(IGrpcClient grpcClient, IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<CreateEmployeeCommandHandler> logger) : IRequestHandler<CreateEmployeeCommand>
     {
+        private readonly IGrpcClient _grpcClient = grpcClient;
         private readonly IMessageBus _messageBus = messageBus;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        private readonly DepartmentGrpcClient _departmentGrpcClient = departmentGrpcClient;
         private readonly ILogger<CreateEmployeeCommandHandler> _logger = logger;
 
         public async Task Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
-            var reply = await _departmentGrpcClient.CheckIfDepartmentExistsAsync(new CheckIfDepartmentExistsRequest { DepartmentId = command.DepartmentId.ToString() }, cancellationToken: cancellationToken);
-            if (!reply.Exists)
+            var departmentCheck = await _grpcClient.DepartmentService.CheckIfDepartmentExistsAsync(new CheckIfDepartmentExistsRequest { DepartmentId = command.DepartmentId.ToString() }, cancellationToken: cancellationToken);
+            if (!departmentCheck.Exists)
             {
                 throw new NotFoundException("Department does not exist.");
+            }
+
+            var designationCheck = await _grpcClient.DesignationService.CheckIfDesignationExistsAsync(new CheckIfDesignationExistsRequest { DesignationId = command.DesignationId.ToString() }, cancellationToken: cancellationToken);
+            if (!designationCheck.Exists)
+            {
+                throw new NotFoundException("Designation does not exist.");
             }
 
             var newEmployee = new Employee

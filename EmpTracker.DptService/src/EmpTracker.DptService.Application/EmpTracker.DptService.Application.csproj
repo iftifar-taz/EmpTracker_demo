@@ -12,5 +12,4 @@
   <ItemGroup>
     <ProjectReference Include="..\EmpTracker.DptService.Core\EmpTracker.DptService.Core.csproj" />
   </ItemGroup>
-
 </Project>

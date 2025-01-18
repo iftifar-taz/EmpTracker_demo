@@ -5,13 +5,16 @@ using EmpTracker.EmpService.Core.Interfaces;
 using EmpTracker.EmpService.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmpTracker.EmpService.Api.Configurations
 {
     public static class ApplicationConfiguration
     {
-        public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<DataContext>(o => o.UseSqlServer(configuration.GetConnectionString("Default")));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMediatR(config =>
             {

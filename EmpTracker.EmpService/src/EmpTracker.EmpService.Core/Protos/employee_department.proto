@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "EmpTracker.DptService.Core.Protos";
+option csharp_namespace = "EmpTracker.EmpService.Core.Protos";
 
 service DepartmentGrpc {
   rpc CheckIfDepartmentExists (CheckIfDepartmentExistsRequest) returns (CheckIfDepartmentExistsResponse);

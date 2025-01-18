@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "EmpTracker.DgiService.Core.Protos";
+
+service DesignationGrpc {
+  rpc CheckIfDesignationExists (CheckIfDesignationExistsRequest) returns (CheckIfDesignationExistsResponse);
+}
+
+message CheckIfDesignationExistsRequest {
+  string DesignationId = 1;
+}
+
+message CheckIfDesignationExistsResponse {
+  bool Exists = 1;
+}
