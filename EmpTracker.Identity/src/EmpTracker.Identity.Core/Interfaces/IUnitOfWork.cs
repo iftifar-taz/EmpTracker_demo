@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpTracker.Identity.Core.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         public UserManager<AppUser> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }

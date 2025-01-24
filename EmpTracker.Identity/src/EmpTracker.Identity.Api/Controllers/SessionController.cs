@@ -2,6 +2,7 @@
 using EmpTracker.Identity.Application.Dtos;
 using EmpTracker.Identity.Application.Features.Sessions.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmpTracker.Identity.Api.Controllers
@@ -22,6 +23,7 @@ namespace EmpTracker.Identity.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost("refresh-session", Name = "RefreshSession")]
         public async Task<ActionResult<SessionResponseDto>> RefreshSession([FromBody] RefreshSessionCommand command)
         {
