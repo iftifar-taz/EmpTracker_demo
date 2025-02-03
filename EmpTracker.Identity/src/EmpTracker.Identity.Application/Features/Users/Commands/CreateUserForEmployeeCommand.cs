@@ -2,7 +2,7 @@
 
 namespace EmpTracker.Identity.Application.Features.Users.Commands
 {
-    public class CreateUserForEmployeeCommand : IRequest
+    public class CreateUserForEmployeeCommand : IRequest<string>
     {
         public Guid EmployeeId { get; set; }
         public required string Email { get; set; }

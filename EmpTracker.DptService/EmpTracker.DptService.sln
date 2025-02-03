@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpTracker.DptService.Core"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpTracker.DptService.Application", "src\EmpTracker.DptService.Application\EmpTracker.DptService.Application.csproj", "{E7EFC585-4D91-4F97-92D0-765665327C95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpTracker.EventBus.Contracts", "..\EmpTracker.EventBus.Contracts\EmpTracker.EventBus.Contracts.csproj", "{3FEE7C31-2769-494B-936E-59A4267FBCD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E7EFC585-4D91-4F97-92D0-765665327C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7EFC585-4D91-4F97-92D0-765665327C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7EFC585-4D91-4F97-92D0-765665327C95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FEE7C31-2769-494B-936E-59A4267FBCD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FEE7C31-2769-494B-936E-59A4267FBCD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FEE7C31-2769-494B-936E-59A4267FBCD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FEE7C31-2769-494B-936E-59A4267FBCD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

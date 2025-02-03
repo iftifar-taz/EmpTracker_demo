@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace EmpTracker.DptService.Application.Features.Departments.Handlers
 {
-    public class CreateDepartmentCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateDepartmentCommandHandler> logger) : IRequestHandler<CreateDepartmentCommand>
+    public class CreateDepartmentCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateDepartmentCommandHandler> logger) : IRequestHandler<CreateDepartmentCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ILogger<CreateDepartmentCommandHandler> _logger = logger;
 
-        public async Task Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
         {
             var department = await _unitOfWork.DepartmentManager.FirstOrDefaultAsync(x => x.DepartmentKey == command.DepartmentKey, cancellationToken);
             if (department != null)
@@ -30,6 +30,8 @@ namespace EmpTracker.DptService.Application.Features.Departments.Handlers
             await _unitOfWork.DepartmentManager.AddAsync(newDepartment, cancellationToken);
             await _unitOfWork.SaveChangesAsync();
             _logger.LogInformation("Department creaded.");
+
+            return newDepartment.DepartmentId;
         }
     }
 }

@@ -1,58 +1,42 @@
 ﻿using EmpTracker.DgiService.Core.Domain.Attribures;
-using EmpTracker.DgiService.Core.Interfaces;
-using EmpTracker.DgiService.Core.Messages;
+using EmpTracker.EventBus.Contracts;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
 
 namespace EmpTracker.DgiService.Infrastructure.Messaging
 {
     public class PermissionPublisherService : IHostedService
     {
-        private IMessageBus _messageBus { get; set; }
+        private IPublishEndpoint _publishEndpoint { get; set; }
 
         public PermissionPublisherService(IServiceScopeFactory scopeFactory)
         {
             var scope = scopeFactory.CreateScope();
-            _messageBus = scope.ServiceProvider.GetRequiredService<IMessageBus>();
+            _publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var message = new List<string>();
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName?.StartsWith("EmpTracker.DgiService.Api") ?? false);
-            var controllers = assembly.SelectMany(x => x.GetTypes()).Where(t => t.IsSubclassOf(typeof(ControllerBase)) && t.IsClass && !t.IsAbstract); ;
-            foreach (var controller in controllers)
-            {
-                var methods = controller.GetMethods();
-                foreach (var method in methods)
-                {
-                    var attributes = method.GetCustomAttributes(true);
-                    foreach (var attribute in attributes)
-                    {
-                        if (attribute is PermissionRequirementAttribute permissionRequirement)
-                        {
-                            message.Add(permissionRequirement.Permission);
-                        }
+            var permissions = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(x => x.FullName?.StartsWith("EmpTracker.DgiService.Api") ?? false)
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(t => t.IsSubclassOf(typeof(ControllerBase)) && t.IsClass && !t.IsAbstract)
+                .SelectMany(controller => controller.GetMethods())
+                .SelectMany(method => method.GetCustomAttributes(true).OfType<PermissionRequirementAttribute>())
+                .Select(permissionRequirement => permissionRequirement.Permission)
+                .Distinct()
+                .ToList();
 
-                    }
-                }
-            }
-
-            var dto = new PermissionSyncMessage()
-            {
-                ServiceName = "designation",
-                Permissions = message.Distinct().ToList(),
-            };
-
-            await Task.Delay(10000, cancellationToken);
-            await _messageBus.PublishAsync(dto, "empTracker.topic", ExchangeType.Topic, "identity.permission.designation");
+            await Task.Delay(5000, cancellationToken);
+            await _publishEndpoint.Publish(new PermissionsCreationStarted(Guid.NewGuid(), "employee", permissions), cancellationToken);
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            await Task.Run(() => _messageBus.DisposeConnection(), cancellationToken);
+            Console.WriteLine("Stop Async");
+            return Task.CompletedTask;
         }
     }
 }

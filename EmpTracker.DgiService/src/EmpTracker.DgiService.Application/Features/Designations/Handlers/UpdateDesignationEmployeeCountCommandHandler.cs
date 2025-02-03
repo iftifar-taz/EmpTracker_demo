@@ -14,7 +14,7 @@ namespace EmpTracker.DgiService.Application.Features.Designations.Handlers
 
         public async Task Handle(UpdateDesignationEmployeeCountCommand command, CancellationToken cancellationToken)
         {
-            var designation = await _unitOfWork.DesignationManager.FirstOrDefaultAsync(x => x.DesignationId == command.DesignationId, cancellationToken) ?? throw new BadRequestException("Designation does not exist.");
+            var designation = await _unitOfWork.DesignationManager.FirstOrDefaultAsync(x => x.DesignationId == command.DesignationId, cancellationToken) ?? throw new NotFoundException("Designation does not exist.");
             designation.EmployeeCount += command.Amount;
 
             _unitOfWork.DesignationManager.Update(designation);

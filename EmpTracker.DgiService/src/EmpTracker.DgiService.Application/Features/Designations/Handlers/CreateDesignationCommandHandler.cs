@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace EmpTracker.DgiService.Application.Features.Designations.Handlers
 {
-    public class CreateDesignationCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateDesignationCommandHandler> logger) : IRequestHandler<CreateDesignationCommand>
+    public class CreateDesignationCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateDesignationCommandHandler> logger) : IRequestHandler<CreateDesignationCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ILogger<CreateDesignationCommandHandler> _logger = logger;
 
-        public async Task Handle(CreateDesignationCommand command, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateDesignationCommand command, CancellationToken cancellationToken)
         {
             var Designation = await _unitOfWork.DesignationManager.FirstOrDefaultAsync(x => x.DesignationKey == command.DesignationKey, cancellationToken);
             if (Designation != null)
@@ -30,6 +30,8 @@ namespace EmpTracker.DgiService.Application.Features.Designations.Handlers
             await _unitOfWork.DesignationManager.AddAsync(newDesignation, cancellationToken);
             await _unitOfWork.SaveChangesAsync();
             _logger.LogInformation("Designation creaded.");
+
+            return newDesignation.DesignationId;
         }
     }
 }

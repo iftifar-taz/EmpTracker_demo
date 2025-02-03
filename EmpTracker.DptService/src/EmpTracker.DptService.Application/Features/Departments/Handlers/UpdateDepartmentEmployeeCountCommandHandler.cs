@@ -14,7 +14,7 @@ namespace EmpTracker.DptService.Application.Features.Departments.Handlers
 
         public async Task Handle(UpdateDepartmentEmployeeCountCommand command, CancellationToken cancellationToken)
         {
-            var department = await _unitOfWork.DepartmentManager.FirstOrDefaultAsync(x => x.DepartmentId == command.DepartmentId, cancellationToken) ?? throw new BadRequestException("Department does not exist.");
+            var department = await _unitOfWork.DepartmentManager.FirstOrDefaultAsync(x => x.DepartmentId == command.DepartmentId, cancellationToken) ?? throw new NotFoundException("Department does not exist.");
             department.EmployeeCount += command.Amount;
 
             _unitOfWork.DepartmentManager.Update(department);

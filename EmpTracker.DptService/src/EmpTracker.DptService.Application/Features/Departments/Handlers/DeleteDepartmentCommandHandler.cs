@@ -1,18 +1,17 @@
-﻿using EmpTracker.DptService.Application.Dtos;
-using EmpTracker.DptService.Application.Exceptions;
+﻿using EmpTracker.DptService.Application.Exceptions;
 using EmpTracker.DptService.Application.Features.Departments.Commands;
-using EmpTracker.DptService.Core.Domain.Entities;
 using EmpTracker.DptService.Core.Interfaces;
+using EmpTracker.EventBus.Contracts;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
 
 namespace EmpTracker.DptService.Application.Features.Departments.Handlers
 {
-    public class DeleteDepartmentCommandHandler(IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<DeleteDepartmentCommandHandler> logger) : IRequestHandler<DeleteDepartmentCommand>
+    public class DeleteDepartmentCommandHandler(IPublishEndpoint publishEndpoint, IUnitOfWork unitOfWork, ILogger<DeleteDepartmentCommandHandler> logger) : IRequestHandler<DeleteDepartmentCommand>
     {
-        private readonly IMessageBus _messageBus = messageBus;
+        private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ILogger<DeleteDepartmentCommandHandler> _logger = logger;
 
@@ -23,16 +22,7 @@ namespace EmpTracker.DptService.Application.Features.Departments.Handlers
             await _unitOfWork.SaveChangesAsync();
             _logger.LogInformation("Department deleted.");
 
-            await PublishMessage(department);
-        }
-
-        private async Task PublishMessage(Department department)
-        {
-            var dto = new DepartmentMessageRequestDto
-            {
-                DepartmentId = department.DepartmentId,
-            };
-            await _messageBus.PublishAsync(dto, "empTracker.direct", ExchangeType.Direct, "department.deleted");
+            await _publishEndpoint.Publish(new DepartmentDeletionSuccess(department.DepartmentId), cancellationToken);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace EmpTracker.DptService.Api.Controllers
         [HttpPost("", Name = "CreateDepartment")]
         public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentCommand command)
         {
-            await _mediator.Send(command);
+            var departmentId = await _mediator.Send(command);
             return Created();
         }
 

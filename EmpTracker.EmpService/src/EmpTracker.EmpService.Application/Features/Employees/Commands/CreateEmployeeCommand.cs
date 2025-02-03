@@ -2,7 +2,7 @@
 
 namespace EmpTracker.EmpService.Application.Features.Employees.Commands
 {
-    public class CreateEmployeeCommand : IRequest
+    public class CreateEmployeeCommand : IRequest<Guid>
     {
         public required string Email { get; set; }
         public required string PhoneNumber { get; set; }

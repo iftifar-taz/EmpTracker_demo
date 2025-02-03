@@ -10,11 +10,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EmpTracker.Identity.Infrastructure.Services
 {
-    public class JwtTokenService(RedisCacheService redisCacheService, IUnitOfWork unitOfWork, IConfiguration configuration) : IJwtTokenService
+    public class JwtTokenService(RedisCache redisCacheService, IUnitOfWork unitOfWork, IConfiguration configuration) : IJwtTokenService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IConfiguration _configuration = configuration;
-        private readonly RedisCacheService _redisCacheService = redisCacheService;
+        private readonly RedisCache _redisCacheService = redisCacheService;
 
         public async Task<string> GenerateToken(AppUser user)
         {

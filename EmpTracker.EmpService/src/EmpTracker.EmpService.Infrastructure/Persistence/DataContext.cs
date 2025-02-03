@@ -10,6 +10,9 @@ namespace EmpTracker.EmpService.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.HasDefaultSchema("app");
+
             builder.Entity<Employee>().HasIndex(u => u.LastName);
             builder.Entity<Employee>().HasIndex(u => u.Email).IsUnique();
             builder.Entity<Employee>().HasIndex(u => u.PhoneNumber).IsUnique();

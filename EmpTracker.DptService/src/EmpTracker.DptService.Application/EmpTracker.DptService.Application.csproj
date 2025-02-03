@@ -5,11 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-<ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+		<PackageReference Include="MassTransit" Version="8.3.5" />
 		<PackageReference Include="MediatR" Version="12.4.1" />
-	</ItemGroup>	
+	</ItemGroup>
   <ItemGroup>
+	<ProjectReference Include="..\..\..\EmpTracker.EventBus.Contracts\EmpTracker.EventBus.Contracts.csproj" />
     <ProjectReference Include="..\EmpTracker.DptService.Core\EmpTracker.DptService.Core.csproj" />
   </ItemGroup>
 </Project>

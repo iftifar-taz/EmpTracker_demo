@@ -1,18 +1,17 @@
-﻿using EmpTracker.DgiService.Application.Dtos;
-using EmpTracker.DgiService.Application.Exceptions;
+﻿using EmpTracker.DgiService.Application.Exceptions;
 using EmpTracker.DgiService.Application.Features.Designations.Commands;
-using EmpTracker.DgiService.Core.Domain.Entities;
 using EmpTracker.DgiService.Core.Interfaces;
+using EmpTracker.EventBus.Contracts;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
 
 namespace EmpTracker.DgiService.Application.Features.Designations.Handlers
 {
-    public class DeleteDesignationCommandHandler(IMessageBus messageBus, IUnitOfWork unitOfWork, ILogger<DeleteDesignationCommandHandler> logger) : IRequestHandler<DeleteDesignationCommand>
+    public class DeleteDesignationCommandHandler(IPublishEndpoint publishEndpoint, IUnitOfWork unitOfWork, ILogger<DeleteDesignationCommandHandler> logger) : IRequestHandler<DeleteDesignationCommand>
     {
-        private readonly IMessageBus _messageBus = messageBus;
+        private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ILogger<DeleteDesignationCommandHandler> _logger = logger;
 
@@ -23,16 +22,7 @@ namespace EmpTracker.DgiService.Application.Features.Designations.Handlers
             await _unitOfWork.SaveChangesAsync();
             _logger.LogInformation("Designation deleted.");
 
-            await PublishMessage(designation);
-        }
-
-        private async Task PublishMessage(Designation designation)
-        {
-            var dto = new DesignationMessageRequestDto
-            {
-                DesignationId = designation.DesignationId,
-            };
-            await _messageBus.PublishAsync(dto, "empTracker.direct", ExchangeType.Direct, "designation.deleted");
+            await _publishEndpoint.Publish(new DesignationDeletionSuccess(designation.DesignationId), cancellationToken);
         }
     }
 }

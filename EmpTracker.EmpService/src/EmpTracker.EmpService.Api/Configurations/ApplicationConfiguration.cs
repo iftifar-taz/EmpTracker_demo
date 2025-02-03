@@ -1,21 +1,21 @@
-﻿using Asp.Versioning;
+﻿using System.Security.Claims;
+using Asp.Versioning;
 using EmpTracker.EmpService.Application.Behaviors.Validators;
 using EmpTracker.EmpService.Application.Features.Employees.Commands;
 using EmpTracker.EmpService.Core.Interfaces;
 using EmpTracker.EmpService.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
 
 namespace EmpTracker.EmpService.Api.Configurations
 {
     public static class ApplicationConfiguration
     {
-        public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(o => o.UseSqlServer(configuration.GetConnectionString("Default")));
+            services.AddSingleton<RedisCache>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssemblyContaining<CreateEmployeeCommand>();
@@ -35,9 +35,40 @@ namespace EmpTracker.EmpService.Api.Configurations
                 options.SubstituteApiVersionInUrl = true;
             });
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
+            services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
+
             return services;
+        }
+
+        internal sealed class CustomClaimsTransformation(IServiceProvider serviceProvider) : IClaimsTransformation
+        {
+            public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
+            {
+                //using IServiceScope scope = serviceProvider.CreateScope();
+                //var _redisCacheService = scope.ServiceProvider.GetRequiredService<RedisCacheService>();
+                //var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                //if (userId == null)
+                //{
+                //    return principal;
+                //}
+
+                //var roles = await _redisCacheService.GetCacheAsync<IList<string>>(userId);
+                //var claims = new List<Claim>();
+
+                //foreach (var role in roles!)
+                //{
+                //    claims.Add(new Claim(ClaimTypes.Role, role));
+                //}
+
+                //var claimsIdentity = new ClaimsIdentity();
+                //claimsIdentity.AddClaims(claims);
+                //principal.AddIdentity(claimsIdentity);
+
+                return principal;
+            }
         }
     }
 }

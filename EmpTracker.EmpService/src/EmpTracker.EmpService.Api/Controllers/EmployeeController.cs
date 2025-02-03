@@ -35,7 +35,7 @@ namespace EmpTracker.EmpService.Api.Controllers
         [HttpPost("", Name = "CreateEmployee")]
         public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeCommand command)
         {
-            await _mediator.Send(command);
+            var employeeId = await _mediator.Send(command);
             return Created();
         }
 

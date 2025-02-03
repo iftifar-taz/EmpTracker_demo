@@ -11,6 +11,9 @@ namespace EmpTracker.Identity.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.HasDefaultSchema("app");
+
             builder.Entity<Permission>().HasIndex(u => u.PermissionKey).IsUnique();
             builder.Entity<Permission>().HasIndex(u => u.ServiceName);
         }

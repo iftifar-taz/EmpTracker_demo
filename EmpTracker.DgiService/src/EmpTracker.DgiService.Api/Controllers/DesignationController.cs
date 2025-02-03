@@ -35,7 +35,7 @@ namespace EmpTracker.DgiService.Api.Controllers
         [HttpPost("", Name = "CreateDesignation")]
         public async Task<IActionResult> CreateDesignation([FromBody] CreateDesignationCommand command)
         {
-            await _mediator.Send(command);
+            var designationId = await _mediator.Send(command);
             return Created();
         }
 

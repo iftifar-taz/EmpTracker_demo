@@ -6,16 +6,16 @@ using MediatR;
 
 namespace EmpTracker.Identity.Application.Features.Users.Handlers
 {
-    public class CreateUserForEmployeeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateUserForEmployeeCommand>
+    public class CreateUserForEmployeeCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateUserForEmployeeCommand, string>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task Handle(CreateUserForEmployeeCommand command, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateUserForEmployeeCommand command, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.UserManager.FindByEmailAsync(command.Email);
             if (user != null)
             {
-                throw new NotFoundException("User already exist.");
+                throw new ConflictException("User already exist.");
             }
 
             var nweUser = new AppUser
@@ -30,7 +30,7 @@ namespace EmpTracker.Identity.Application.Features.Users.Handlers
 
             if (!result.Succeeded)
             {
-                throw new BadRequestException(result.Errors.FirstOrDefault()?.Description ?? string.Empty);
+                throw new UserCreationException(result.Errors.FirstOrDefault()?.Description ?? string.Empty);
             }
 
             if (command.Roles is null)
@@ -41,6 +41,8 @@ namespace EmpTracker.Identity.Application.Features.Users.Handlers
             {
                 await _unitOfWork.UserManager.AddToRolesAsync(nweUser, command.Roles);
             }
+
+            return nweUser.Id;
         }
     }
 }

@@ -17,7 +17,8 @@ namespace EmpTracker.EmpService.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasDefaultSchema("app")
+                .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -100,7 +101,7 @@ namespace EmpTracker.EmpService.Infrastructure.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", "app");
                 });
 #pragma warning restore 612, 618
         }
